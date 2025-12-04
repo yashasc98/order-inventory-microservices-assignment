@@ -1,44 +1,88 @@
-Java Microservices Assignment
-Objective
-Design and implement two Spring Boot microservices — Order Service and Inventory
-Service — that communicate via REST APIs. The system should be modular and extensible
-using the Factory Design Pattern, allowing future expansion of services and logic.
-Microservice 1: Inventory Service
-Requirements:
-- Maintain inventory of materials/products.
-- Each product can have multiple batches with different expiry dates.
-- Implement an endpoint to return inventory batches sorted by expiry date for a given
-  product.
-- Use Spring Data JPA with an H2 in-memory database.
-- Implement a Factory Pattern to allow future extension of inventory handling logic.
-- Include Controller, Service, and Repository layers.
-  Endpoints:
-  GET /inventory/{productId} – Returns list of inventory batches sorted by expiry date.
-  POST /inventory/update – Updates inventory after an order is placed.
-  Microservice 2: Order Service
-  Requirements:
-- Accept and process product orders.
-- Communicate with Inventory Service to check availability and update stock.
-- Use RestTemplate or WebClient for inter-service communication.
-- Include Controller, Service, and Repository layers.
-- Use Spring Data JPA with H2 database.
-  Endpoints:
-  POST /order – Places an order and updates inventory accordingly.
+# Java Microservices Assignment
 
-Testing Requirements
-- Write unit tests for service logic using JUnit 5 and Mockito.
-- Write component/integration tests using @SpringBootTest and H2 database.
-- Ensure REST endpoints are covered in tests.
-  Architecture Requirements
-- Follow Factory Design Pattern in Inventory Service to allow future extensibility.
-- Ensure all classes are designed to be extendable and loosely coupled.
-- Use Lombok to reduce boilerplate code (optional).
-- Use Swagger/OpenAPI for API documentation (optional).
-  Submission Guidelines
-- Create a new GitHub repository named: order-inventory-microservices-assignment
-- Push both microservices as separate modules or folders within the same repository.
-- Include a README.md file with:
-  • Project setup instructions
-  • API documentation
-  • Testing instructions
-- Ensure the project builds and runs using Maven or Gradle.
+## Objective
+
+Design and implement two Spring Boot microservices—Order Service and Inventory Service—that communicate via REST APIs. The system is designed to be modular and extensible, using the Factory Design Pattern for future expansion.
+
+## Project Setup
+
+### Prerequisites
+
+- Java 17
+- Maven
+
+### Environment Configuration
+
+Each service runs on its own port, as defined in their respective `application.properties` files:
+
+-   **Order Service:** `server.port=8080`
+-   **Inventory Service:** `server.port=8081`
+
+### Build the Project
+
+Before running the services, build both projects from their respective directories:
+
+```sh
+mvn clean install
+```
+
+### Running the Services
+
+1.  **Inventory Service:**
+
+    Navigate to the `inventory-service` directory and run the following command:
+
+    ```sh
+    mvn spring-boot:run
+    ```
+
+2.  **Order Service:**
+
+    Navigate to the `order-service` directory and run the following command:
+
+    ```sh
+    mvn spring-boot:run
+    ```
+
+## API Documentation
+
+### Inventory Service
+
+-   **GET /inventory/{productId}**
+
+    Returns a list of inventory batches for a given product, sorted by expiry date.
+
+-   **POST /inventory/update**
+
+    Updates inventory after an order is placed. This is typically called by the Order Service.
+
+-   **POST /inventory/product**
+
+    Adds a new product to the inventory.
+
+### Order Service
+
+-   **POST /api/order**
+
+    Places an order and updates inventory accordingly by communicating with the Inventory Service.
+
+-   **GET /api/order/{orderId}**
+
+    Retrieves the details of a specific order by its ID.
+
+-   **GET /api/order/customer/{customerId}**
+
+    Retrieves all orders for a specific customer.
+
+## Testing Instructions
+
+To run the tests for each service, navigate to the respective service's directory (`inventory-service` or `order-service`) and run the following command:
+
+```sh
+mvn test
+```
+
+### Test Coverage
+
+-   **Unit Tests:** Each service contains unit tests for its services and controllers.
+-   **Integration Tests:** The `order-service` includes integration tests that use a mock `InventoryService` to simulate communication between the two services.
